@@ -1,8 +1,6 @@
 CREATE TABLE POKEMON (ID INT PRIMARY KEY,
-                    --TRAINER_ID INT DEFAULT 0,
                     NAME VARCHAR(25),
                     TYPE VARCHAR(25) );
-                    --TIME_ADDED TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 CREATE TABLE TRAINER(ID INT PRIMARY KEY ,
                       NAME VARCHAR(25),

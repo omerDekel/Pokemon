@@ -27,8 +27,8 @@ public class TrainerController {
     JdbcTemplate jdbcTemplate;
 
     /**
-     * Get all pokemons in the world
-     * @return List of pokemons in the world.
+     * Get all trainers in the world
+     * @return List of trainers in the world, sorted by level.
      */
     @GetMapping("/trainers")
     public TrainerList getTrainers() {
@@ -41,16 +41,36 @@ public class TrainerController {
         trainerList.setTrainerList(rows);
         return trainerList;
     }
+
+    /***
+     * getTrainer
+     * @param name of the trainer.
+     * @return trainer data .
+     */
     @GetMapping("/trainer/{trainer_name}")
     public Trainer getTrainer(@PathVariable("trainer_name") String name){
         return getTrainerByName(name);
     }
+
+    /***
+     * getTrainerByName
+     * @param name of the trainer.
+     * @return trainer data .
+     */
     private Trainer getTrainerByName(String name){
         Trainer t = jdbcTemplate.queryForObject("SELECT * from TRAINER where name = '"+name+"'",new TrainerRowMapper());
         List<String> pokemons = getTrainerBag(t.getId());
         t.setBag(pokemons);
         return t;
     }
+
+    /***
+     * catchPokemon.
+     * catch pokemon by a trainer.
+     * @param trainer_name
+     * @param pokemon_name
+     * @return the bag after the catch .
+     */
     @GetMapping("/trainer/{trainer_name}/catch/{pokemon_name}")
     public List<String> catchPokemon(@PathVariable("trainer_name")String trainer_name,
                                      @PathVariable("pokemon_name")String pokemon_name){
@@ -59,12 +79,15 @@ public class TrainerController {
         Timestamp cur_time = new Timestamp(System.currentTimeMillis());
         Pokemon pokemon = jdbcTemplate.queryForObject("select * from pokemon where name ='"+pokemon_name+"'",
                 new PokemonRawMapper());
+        // if the pokemon isn't in the bag already .
         if(!trainer.bagContains(pokemon.getName())){
             if(trainer.isFull()){
+                // replacing the most former pokemon with the new pokemon.
                 jdbcTemplate.update(" update pokemons_trainer set pokemons_trainer.time_added ='"+cur_time+
                         "' ,pokemons_trainer.pokemon_id="+pokemon.getId()+" where pokemons_trainer.time_added = (select " +
                         "min(time_added) from pokemons_trainer where pokemons_trainer.trainer_id ='"+ trainerId+ "')") ;
             }else{
+                // if the bag isn't full we just add the pokemon to the bag
                 jdbcTemplate.update("INSERT INTO POKEMONS_TRAINER (TRAINER_ID, POKEMON_ID) VALUES ("+trainerId+","
                         +pokemon.getId()+");");
             }
@@ -73,15 +96,20 @@ public class TrainerController {
         return trainer.getBag();
     }
     private Pokemon getPokemonByName(String name){
-        Pokemon p = jdbcTemplate.queryForObject("select * from pokemon where name ='"+name+"'",
+        return jdbcTemplate.queryForObject("select * from pokemon where name ='"+name+"'",
                 new PokemonRawMapper());
-        return p;
     }
+
+    /***
+     * getTrainerBag
+     * return the bag of the pokemon sorted by the time the pokemon was added to the bag .
+     * @param trainerID
+     * @return
+     */
     private List<String> getTrainerBag(int trainerID){
-        List<String> rows = jdbcTemplate.query("select pokemon.name from pokemon inner join pokemons_trainer " +
+        return jdbcTemplate.query("select pokemon.name from pokemon inner join pokemons_trainer " +
                         "on pokemon.id = pokemons_trainer.pokemon_id where(pokemons_trainer.trainer_id = '" + trainerID +"') " +
                         "order by pokemons_trainer.time_added",
                 new NameRowMapper());
-        return rows;
     }
 }
