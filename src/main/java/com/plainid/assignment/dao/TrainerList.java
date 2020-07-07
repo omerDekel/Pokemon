@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by Omer Dekel on 03/07/2020.
+ * List of trainers.
  */
 public class TrainerList {
     List<Trainer> trainerList;

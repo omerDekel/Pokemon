@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 /**
  * Created by Omer Dekel on 04/07/2020.
+ * Helper class to map SQL result to String name.
  */
 public class NameRowMapper implements RowMapper<String> {
     @Override

@@ -2,25 +2,43 @@ package com.plainid.assignment.dao;
 
 /**
  * Created by Omer Dekel on 04/07/2020.
+ * Battle results class.
  */
 public class Battle {
-    public String getMessage() {
-        return message;
-    }
+    //status of the battle.
+    private BattleStatusType status;
+    //message description .
+    private String message;
 
+    /***
+     * Message getter.
+     * @return this message.
+     */
+    public String getMessage() {return message;}
+
+    /**
+     * Message setter.
+     * @param message .
+     */
     public void setMessage(String message) {
         this.message = message;
     }
 
-    public StatusType getStatus() {
+    /**
+     * status getter.
+     * @return battle's status
+     */
+    public BattleStatusType getStatus() {
         return status;
     }
 
-    public void setStatus(StatusType status) {
+    /***
+     * status setter .
+     * @param status .
+     */
+    public void setStatus(BattleStatusType status) {
         this.status = status;
     }
 
-    private String message;
-    private StatusType status;
 
 }
