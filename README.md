@@ -1,7 +1,5 @@
-# Pokemon
+# Pokemon Game
 REST API service based on Spring Boot, Spring boot test suit, and H2 in-memory embedded SQL DB. Using java 8 with Maven.
-pokemon-bat
-First of all, This Project is based on Spring Boot, and I use H2 SQL DB
 
 ## The Story
 In our story, we have several objects - Pokemon, Trainer and Battle. we’ll go over them one by one:
@@ -29,7 +27,7 @@ Each Trainer has a name, level (number), and a bag of Pokemons. The bag of Pokem
 ## Battle
 Each Trainer can battle other trainers with his Pokemons. Each Pokemon battle is 3 Pokemons vs 3 Pokemons. If one of the trainers has less than 3 Pokemons then the battle is canceled. The winner of the battle will gain 2 level points. If Pokemons are from the same type it’s a tie, and each trainer gets 1 level point. In the battle, every Pokemon in the bag will fight with the Pokemon in the same position on the other Trainer’s bag. The Trainer that most of his Pokemons won is the winner of the battle.
 
-I Also support API Call such as:
+Request call APIs:
 
 ● GET http://localhost:/battle/{trainer1_name}/{trainer2_name}
 
